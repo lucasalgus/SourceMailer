@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"strictNullChecks": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"rootDirs": ["./app/assets/"],
+		"outDir": "./app/static/",
+		"jsx": "react",
+		"module": "commonjs",
+		"target": "es6",
+		"lib": ["dom", "es5"],
+		"sourceMap": true,
+		"moduleResolution": "node"
+	}
+}
