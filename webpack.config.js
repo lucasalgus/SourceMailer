@@ -17,13 +17,24 @@ const APP_CONFIG = {
 const UI_CONFIG = {
 	mode: "development",
 	entry: "./app/assets/ui/app.tsx",
+	resolve: {
+		extensions: [".js", ".ts", ".tsx", ".css"],
+	},
 	target: "electron-renderer",
 	output: {
 		filename: "ui.js",
 		path: path.resolve(__dirname, "app/static")
 	},
 	module: {
-		rules: [{ test: /\.tsx/, loader: "ts-loader" }]
+		rules: [
+			{
+				test: /\.tsx/, loader: "ts-loader"
+			},
+			{
+				test: /\.css$/,
+				use: ["style-loader", "css-loader"]
+			}
+		]
 	},
 	plugins: [new HtmlWebpackPlugin({
 		template: "./app/assets/ui/index.html"
