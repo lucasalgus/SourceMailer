@@ -1,4 +1,6 @@
 body {
-	--color-primary: rgb(0, 0, 0, .75);
+	--color-primary: #3D3D3D;
 	--color-secondary: #E2E2E2;
+	--color-title-bar: rgb(0, 0, 0, .75);
+	--color-placeholder: #B7B7B7;
 }

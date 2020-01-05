@@ -1,0 +1,21 @@
+.button {
+	padding: 10px 15px;
+	margin: 0;
+	border: 0;
+	border-radius: 8px;
+	font-size: 14px;
+	font-weight: 500;
+	outline: none;
+	transition: transform .1s;
+}
+.button.-primary {
+	background-color: var(--color-primary);
+	color: var(--color-secondary);
+}
+.button.-secondary {
+	background-color: var(--color-secondary);
+	color: var(--color-primary);
+}
+.button:active {
+	transform: scale(0.95);
+}

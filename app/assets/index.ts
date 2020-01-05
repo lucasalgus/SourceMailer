@@ -4,8 +4,8 @@ const createWindow = () => {
 	const window = new BrowserWindow({
 		title: "SourceMailer",
 		titleBarStyle: "hidden",
-		width: 800,
-		height: 600,
+		minWidth: 800,
+		minHeight: 600,
 		webPreferences: {
 			nodeIntegration: true
 		}
