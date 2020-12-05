@@ -1,47 +1,35 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 const APP_CONFIG = {
-	mode: "development",
-	entry: "./app/assets/index.ts",
+	entry: path.resolve(__dirname, "src/app.ts"),
 	target: "electron-main",
 	output: {
-		filename: "index.js",
-		path: path.resolve(__dirname, "app/static")
+		path: path.resolve(__dirname, "public"),
+		filename: "app.js",
 	},
 	module: {
-		rules: [{ test: /\.tsx/, loader: "ts-loader" }]
-	}
+		rules: [{ test: /\.ts/, loader: "ts-loader" }],
+	},
 };
 
 const UI_CONFIG = {
-	mode: "development",
-	entry: "./app/assets/ui/app.tsx",
+	entry: path.resolve(__dirname, "src/ui.tsx"),
 	resolve: {
-		extensions: [".js", ".ts", ".tsx", ".css"],
+		extensions: [".js", ".ts", ".tsx"],
 	},
 	target: "electron-renderer",
 	output: {
+		path: path.resolve(__dirname, "public/static"),
 		filename: "ui.js",
-		path: path.resolve(__dirname, "app/static")
 	},
 	module: {
 		rules: [
 			{
-				test: /\.tsx/, loader: "ts-loader"
+				test: /\.tsx/,
+				loader: "ts-loader",
 			},
-			{
-				test: /\.css$/,
-				use: ["style-loader", "css-loader"]
-			}
-		]
+		],
 	},
-	plugins: [new HtmlWebpackPlugin({
-		template: "./app/assets/ui/index.html"
-	})]
 };
 
-module.exports = [
-	APP_CONFIG,
-	UI_CONFIG
-]
+module.exports = [APP_CONFIG, UI_CONFIG];
