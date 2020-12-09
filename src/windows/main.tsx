@@ -7,12 +7,14 @@ import Container from "../components/container";
 import Row from "../components/row";
 import TextField from "../components/textField";
 import Button from "../components/button";
+import EmailViewer from "../components/emailViewer";
 
 const { ipcRenderer } = window.require("electron");
 
 export default function Main() {
 	const [recipients, setRecipients] = useState<string[]>([]);
 	const [subject, setSubject] = useState("");
+	const [showCode, setShowCode] = useState(true);
 
 	function openSettings() {
 		self.open(`file://${__dirname}/settings.html`);
@@ -34,8 +36,8 @@ export default function Main() {
 	}
 
 	return (
-		<Container padding="15px">
-			<Row>
+		<Container padding="15px" rowSpacing="20px">
+			<Row maxHeight="32px">
 				<TextField
 					placeholder="To"
 					id="recipients"
@@ -48,7 +50,7 @@ export default function Main() {
 					}
 				/>
 			</Row>
-			<Row>
+			<Row maxHeight="32px">
 				<TextField
 					placeholder="Subject"
 					id="subject"
@@ -58,11 +60,11 @@ export default function Main() {
 				/>
 			</Row>
 			<Row>
-				<p>Editor placeholder</p>
+				<EmailViewer showCode={showCode} />
 			</Row>
-			<Row>
+			<Row maxHeight="32px">
 				<Button onClick={openSettings}>Settings</Button>
-				<Button>Toggle Code</Button>
+				<Button onClick={() => setShowCode(!showCode)}>Toggle Code</Button>
 				<Button>Export HTML</Button>
 				<Button>Open File</Button>
 				<Button onClick={sendMail}>Send</Button>

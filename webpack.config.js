@@ -1,4 +1,5 @@
 const path = require("path");
+const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
 const APP_CONFIG = {
 	entry: path.resolve(__dirname, "src/app.ts"),
@@ -14,10 +15,10 @@ const APP_CONFIG = {
 
 const UI_CONFIG = {
 	entry: path.resolve(__dirname, "src/ui.tsx"),
-	resolve: {
-		extensions: [".js", ".ts", ".tsx"],
-	},
 	target: "electron-renderer",
+	resolve: {
+		extensions: [".js", ".ts", ".tsx", ".css", ".ttf"],
+	},
 	output: {
 		path: path.resolve(__dirname, "public/static"),
 		filename: "ui.js",
@@ -28,8 +29,17 @@ const UI_CONFIG = {
 				test: /\.tsx/,
 				loader: "ts-loader",
 			},
+			{
+				test: /\.css$/,
+				use: ["style-loader", "css-loader"],
+			},
+			{
+				test: /\.ttf$/,
+				use: ["file-loader"],
+			},
 		],
 	},
+	plugins: [new MonacoWebpackPlugin()],
 };
 
 module.exports = [APP_CONFIG, UI_CONFIG];
