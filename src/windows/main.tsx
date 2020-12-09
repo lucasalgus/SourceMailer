@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import { retrieveSettings } from "../utils/localStorage";
+import {
+	retrieveMainData,
+	retrieveSettings,
+	saveMainData,
+} from "../utils/localStorage";
+import validateEmail from "../utils/validateEmail";
+
 import { Message } from "../types/message";
+import { MainData } from "../types/mainData";
 
 import Container from "../components/container";
 import Spacer from "../components/spacer";
@@ -17,6 +24,8 @@ export default function Main() {
 	const [subject, setSubject] = useState("");
 	const [html, setHTML] = useState<string>("");
 	const [showCode, setShowCode] = useState(true);
+	const [valid, setValid] = useState(false);
+	const [sending, setSending] = useState(false);
 
 	function openSettings() {
 		self.open(`file://${__dirname}/settings.html`);
@@ -45,10 +54,57 @@ export default function Main() {
 
 		if (!settings) {
 			openSettings();
+			return;
 		}
 
 		ipcRenderer.send("send-mail", { settings, message });
+		setSending(true);
+
+		ipcRenderer.on("send-mail-done", () => {
+			setSending(false);
+		});
 	}
+
+	// On mount
+	useEffect(() => {
+		const data = retrieveMainData();
+
+		if (!data) {
+			return;
+		}
+
+		setRecipients(data.recipients);
+		setSubject(data.subject);
+		setHTML(data.html);
+	}, []);
+
+	// On change
+	useEffect(() => {
+		const data = {
+			recipients,
+			subject,
+			html,
+		} as MainData;
+
+		saveMainData(data);
+	}, [recipients, subject, html]);
+
+	// Validations
+	useEffect(() => {
+		let valid = true;
+
+		if (recipients.split(",").length === 0) {
+			valid = false;
+		}
+
+		recipients.split(",").forEach((r) => {
+			if (!validateEmail(r)) {
+				valid = false;
+			}
+		});
+
+		setValid(valid);
+	});
 
 	return (
 		<Container padding="15px">
@@ -86,7 +142,13 @@ export default function Main() {
 				<Spacer size="15px" />
 				<Button onClick={openFile}>Open File</Button>
 				<Spacer size="15px" />
-				<Button onClick={sendMail}>Send</Button>
+				{sending ? (
+					<Button disabled={true}>Sending...</Button>
+				) : (
+					<Button disabled={!valid} onClick={sendMail}>
+						Send
+					</Button>
+				)}
 			</Row>
 		</Container>
 	);

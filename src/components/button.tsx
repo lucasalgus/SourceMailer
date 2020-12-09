@@ -10,7 +10,7 @@ const StyledButton = styled.button`
 	font-weight: 600;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
-	transition: transform 0.2s;
+	transition: all 0.2s;
 	outline: 0;
 
 	&:hover {
@@ -21,6 +21,15 @@ const StyledButton = styled.button`
 	&:active {
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 		transform: translateY(0);
+	}
+
+	&:disabled {
+		background-color: #dddddd;
+		color: #9b9b9b;
+		box-shadow: 0 0 0 #fff;
+	}
+	&:disabled:hover {
+		transform: none;
 	}
 `;
 

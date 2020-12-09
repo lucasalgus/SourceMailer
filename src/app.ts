@@ -49,6 +49,8 @@ function sendMail(message: Message, settings: ManualSettings) {
 				title: "Email sent",
 				message: "Your email was sent succesfully!",
 			});
+
+			main.webContents.send("send-mail-done");
 		}
 	);
 }

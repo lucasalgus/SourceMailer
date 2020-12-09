@@ -9,12 +9,14 @@ import Title from "../components/title";
 import TextField from "../components/textField";
 import RadioGroup from "../components/radioGroup";
 import Button from "../components/button";
+import validateEmail from "../utils/validateEmail";
 
 export default function Settings() {
 	const [user, setUser] = useState<string>("");
 	const [pass, setPass] = useState<string>("");
 	const [host, setHost] = useState<string>("");
-	const [secure, setSecure] = useState<boolean>(true);
+	const [secure, setSecure] = useState(true);
+	const [valid, setValid] = useState(false);
 
 	function closeSettingsPage() {
 		window.close();
@@ -47,6 +49,24 @@ export default function Settings() {
 		setHost(settings.host);
 		setSecure(settings.secure);
 	}, []);
+
+	useEffect(() => {
+		let valid = true;
+
+		if (!validateEmail(user)) {
+			valid = false;
+		}
+
+		if (!pass) {
+			valid = false;
+		}
+
+		if (!host) {
+			valid = false;
+		}
+
+		setValid(valid);
+	});
 
 	return (
 		<form onSubmit={onSubmitSettings}>
@@ -98,7 +118,9 @@ export default function Settings() {
 						Close
 					</Button>
 					<Spacer size="15px" />
-					<Button type="submit">Save</Button>
+					<Button disabled={!valid} type="submit">
+						Save
+					</Button>
 				</Row>
 			</Container>
 		</form>
