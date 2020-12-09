@@ -21,8 +21,8 @@ function openMainWindow() {
 		"new-window",
 		(_event, _url, _frameName, _disposition, options, _additionalFeatures) => {
 			options.resizable = false;
-			options.width = 500;
-			options.height = 400;
+			options.width = 350;
+			options.height = 350;
 			options.parent = main;
 			options.center = true;
 		}
@@ -36,12 +36,19 @@ function sendMail(message: Message, settings: ManualSettings) {
 		{
 			from: settings.auth.user,
 			to: message.recipients,
-			subject: `[SourceMailer] ${message.subject}`,
+			subject: message.subject || "Your SourceMailer email",
 			html: message.html,
 		},
-		(error: any, info: any) => {
-			console.log(error);
-			console.log(info);
+		(error) => {
+			if (error) {
+				dialog.showErrorBox("An error occured", error.message);
+				return;
+			}
+
+			dialog.showMessageBox(main, {
+				title: "Email sent",
+				message: "Your email was sent succesfully!",
+			});
 		}
 	);
 }

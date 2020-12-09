@@ -4,6 +4,7 @@ import { retrieveSettings } from "../utils/localStorage";
 import { Message } from "../types/message";
 
 import Container from "../components/container";
+import Spacer from "../components/spacer";
 import Row from "../components/row";
 import TextField from "../components/textField";
 import Button from "../components/button";
@@ -34,10 +35,12 @@ export default function Main() {
 
 	function sendMail() {
 		const settings = retrieveSettings();
+		const recipientsArray = recipients.split(",").map((r) => r.trim());
+
 		const message: Message = {
-			recipients: [],
-			subject: "test",
-			html: "<h1>test</h1>",
+			recipients: recipientsArray,
+			subject,
+			html,
 		};
 
 		if (!settings) {
@@ -51,7 +54,8 @@ export default function Main() {
 		<Container padding="15px">
 			<Row maxHeight="32px">
 				<TextField
-					placeholder="To"
+					label="To"
+					placeholder="example@email.com, example2@email.com"
 					id="recipients"
 					name="recipients"
 					value={recipients}
@@ -63,7 +67,7 @@ export default function Main() {
 			</Row>
 			<Row maxHeight="32px">
 				<TextField
-					placeholder="Subject"
+					label="Subject"
 					id="subject"
 					name="subject"
 					value={subject}
@@ -75,9 +79,13 @@ export default function Main() {
 			</Row>
 			<Row maxHeight="32px">
 				<Button onClick={openSettings}>Settings</Button>
+				<Spacer size="15px" />
 				<Button onClick={() => setShowCode(!showCode)}>Toggle Code</Button>
+				<Spacer size="flex" />
 				<Button onClick={exportHTML}>Export HTML</Button>
+				<Spacer size="15px" />
 				<Button onClick={openFile}>Open File</Button>
+				<Spacer size="15px" />
 				<Button onClick={sendMail}>Send</Button>
 			</Row>
 		</Container>

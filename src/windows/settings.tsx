@@ -3,10 +3,12 @@ import React, { FormEvent, useEffect, useState } from "react";
 import { retrieveSettings, saveSettings } from "../utils/localStorage";
 
 import Container from "../components/container";
-import Button from "../components/button";
+import Spacer from "../components/spacer";
 import Row from "../components/row";
 import Title from "../components/title";
 import TextField from "../components/textField";
+import RadioGroup from "../components/radioGroup";
+import Button from "../components/button";
 
 export default function Settings() {
 	const [user, setUser] = useState<string>("");
@@ -48,22 +50,22 @@ export default function Settings() {
 
 	return (
 		<form onSubmit={onSubmitSettings}>
-			<Container padding="20px">
-				<Row>
+			<Container padding="15px">
+				<Row maxHeight="32px">
 					<Title>Settings</Title>
 				</Row>
-				<Row>
+				<Row maxHeight="32px">
 					<TextField
-						placeholder="Email"
+						label="Email"
 						id="user"
 						name="user"
 						value={user}
 						onChange={(event: any) => setUser(event.target.value)}
 					/>
 				</Row>
-				<Row>
+				<Row maxHeight="32px">
 					<TextField
-						placeholder="Password"
+						label="Password"
 						type="password"
 						id="pass"
 						name="pass"
@@ -71,9 +73,10 @@ export default function Settings() {
 						onChange={(event: any) => setPass(event.target.value)}
 					/>
 				</Row>
-				<Row>
+				<Row maxHeight="32px">
 					<TextField
-						placeholder="Host"
+						label="Host"
+						placeholder="smtp.gmail.com"
 						id="host"
 						name="host"
 						value={host}
@@ -81,9 +84,20 @@ export default function Settings() {
 					/>
 				</Row>
 				<Row>
+					<RadioGroup
+						label="SSL"
+						name="secure"
+						options={["Yes", "No"]}
+						value={secure ? "Yes" : "No"}
+						onChange={(value: string) => setSecure(value === "Yes")}
+					/>
+				</Row>
+				<Row maxHeight="32px">
+					<Spacer size="flex" />
 					<Button type="button" onClick={closeSettingsPage}>
 						Close
 					</Button>
+					<Spacer size="15px" />
 					<Button type="submit">Save</Button>
 				</Row>
 			</Container>

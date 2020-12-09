@@ -7,6 +7,9 @@ type PropsType = {
 
 const StyledH1 = styled.h1`
 	font-size: 19px;
+	font-family: "Open Sans";
+	font-weight: bold;
+	margin: 0;
 `;
 
 export default function Title(props: PropsType) {
