@@ -1,11 +1,14 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import fs from "fs";
 import nodemailer from "nodemailer";
+import { app, BrowserWindow, dialog, ipcMain } from "electron";
 
 import { ManualSettings } from "./types/emailSettings";
 import { Message } from "./types/message";
 
+let main: BrowserWindow;
+
 function openMainWindow() {
-	const main = new BrowserWindow({
+	main = new BrowserWindow({
 		minWidth: 800,
 		minHeight: 600,
 		webPreferences: {
@@ -17,6 +20,7 @@ function openMainWindow() {
 	main.webContents.on(
 		"new-window",
 		(_event, _url, _frameName, _disposition, options, _additionalFeatures) => {
+			options.resizable = false;
 			options.width = 500;
 			options.height = 400;
 			options.parent = main;
@@ -41,6 +45,56 @@ function sendMail(message: Message, settings: ManualSettings) {
 		}
 	);
 }
+
+ipcMain.on("save-file", async (_, html) => {
+	try {
+		const result = await dialog.showSaveDialog({
+			title: "Export HTML file...",
+			securityScopedBookmarks: true,
+			filters: [
+				{
+					name: "HTML File",
+					extensions: ["html"],
+				},
+			],
+		});
+
+		const path = result.filePath;
+		if (!path) {
+			return;
+		}
+
+		fs.writeFile(path, html, (error) => {
+			if (error) {
+				dialog.showErrorBox("An error occured", error.message);
+			}
+		});
+	} catch {
+		// the cancel button was clicked
+	}
+});
+
+ipcMain.on("open-file", async () => {
+	const result = await dialog.showOpenDialog({
+		title: "Open HTML file...",
+		filters: [{ name: "HTML File", extensions: ["html"] }],
+		properties: ["openFile"],
+		securityScopedBookmarks: true,
+	});
+
+	const path = result.filePaths[0];
+	if (!path) {
+		return;
+	}
+
+	fs.readFile(path, "utf8", (error, data) => {
+		if (error) {
+			dialog.showErrorBox("An error occured", error.message);
+		}
+
+		main.webContents.send("open-file-done", data.toString());
+	});
+});
 
 ipcMain.on("send-mail", (_, args) => {
 	const { message, settings } = args;

@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 type PropsType = {
 	showCode: boolean;
+	html: string;
+	setHTML: (html: string) => void;
 };
 
 const EditorContainer = styled.div`
@@ -46,10 +48,11 @@ export default function EmailViewer(props: PropsType) {
 				height={editorHeight}
 				language="html"
 				theme="vs-light"
-				value={"test"}
+				value={props.html}
+				onChange={(value) => props.setHTML(value)}
 			/>
 		</EditorContainer>
 	) : (
-		<div dangerouslySetInnerHTML={{ __html: "<h1>Test</h1>" }} />
+		<div dangerouslySetInnerHTML={{ __html: props.html }} />
 	);
 }

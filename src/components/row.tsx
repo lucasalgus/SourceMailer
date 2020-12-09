@@ -6,14 +6,15 @@ type PropsType = {
 	maxHeight?: string;
 };
 
-export default function Row(props: PropsType) {
-	const RowDiv = styled.div`
-		display: flex;
-		position: relative;
-		flex: 1;
-		max-height: ${props.maxHeight ?? "initial"};
-		background-color: blue;
-	`;
+const RowDiv = styled.div`
+	display: flex;
+	flex: 1;
+	position: relative;
+	box-sizing: border-box;
+`;
 
-	return <RowDiv>{props.children}</RowDiv>;
+export default function Row(props: PropsType) {
+	return (
+		<RowDiv style={{ maxHeight: props.maxHeight ?? "initial" }} {...props} />
+	);
 }
